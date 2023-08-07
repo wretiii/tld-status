@@ -86,9 +86,9 @@ def main():
 
     full_domains = generate_full_domains(domain_name, tlds)
 
-    print("This will take some time. Feel free to grab a drink and relax or move on to other OSINT tasks.")
+    print("Enumerating all TLDs from https://data.iana.org/TLD/tlds-alpha-by-domain.txt. \nThis will take some time. Feel free to grab a drink and relax or move on to other OSINT tasks.")
     time.sleep(30)
-    print("\nPlease enjoy these inspirational quotes:")
+    print("\nPlease enjoy these inspirational quotes while you wait:")
     display_quotes()
 
     results = check_domains(api_key, full_domains)
