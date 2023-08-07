@@ -41,7 +41,7 @@ def display_quotes():
     while True:
         quote = random.choice(quotes)
         print(f'"{quote[0]}" - {quote[1]}')
-        time.sleep(30)
+        time.sleep(120)
 
 def save_results(results, output_file, format):
     if format == 'txt':
