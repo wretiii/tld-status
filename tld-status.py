@@ -1,8 +1,9 @@
 import argparse
 import requests
-import random
 import time
 import csv
+import itertools
+import sys
 
 def download_tlds(url):
     # Request TLDs from the given URL and filter out comments (lines starting with '#')
@@ -33,15 +34,14 @@ def check_domains(api_key, domains):
             results.append((domain, status))
     return results
 
-def display_quotes():
-    # Display random quotes at intervals, retrieved from a static CSV file URL
-    url = "https://gist.githubusercontent.com/JakubPetriska/060958fd744ca34f099e947cd080b540/raw/963b5a9355f04741239407320ac973a6096cd7b6/quotes.csv"
-    response = requests.get(url)
-    quotes = list(csv.reader(response.text.strip().split('\n')))[1:]
+def spinner():
+    # Simple spinner for visual feedback during long operations
+    spinner = itertools.cycle(['-', '/', '|', '\\'])
     while True:
-        quote = random.choice(quotes)
-        print(f'"{quote[0]}" - {quote[1]}')
-        time.sleep(120)
+        sys.stdout.write(next(spinner))   # write the next character
+        sys.stdout.flush()                # flush stdout buffer (actual character display)
+        sys.stdout.write('\b')            # erase the last written char
+        time.sleep(0.2)
 
 def save_results(results, output_file, format):
     # Save domain check results to a file in specified format (TXT or CSV)
@@ -76,11 +76,17 @@ def main():
 
     print("Enumerating all TLDs from https://data.iana.org/TLD/tlds-alpha-by-domain.txt.")
     print("This will take some time. Feel free to grab a drink and relax or move on to other OSINT tasks.")
-    time.sleep(30)
-    print("\nPlease enjoy these inspirational quotes while you wait:")
-    display_quotes()
+
+    # Start spinner in a separate thread
+    import threading
+    spinner_thread = threading.Thread(target=spinner)
+    spinner_thread.start()
 
     results = check_domains(api_key, full_domains)
+
+    # Stop the spinner
+    spinner_thread.do_run = False
+    spinner_thread.join()
 
     for domain, status in results:
         print(f"Domain: {domain}\nStatus: {status}\n")
