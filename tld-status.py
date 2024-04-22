@@ -30,8 +30,8 @@ def main(domain_base):
     return registered_domains
 
 def print_help():
-    print("Usage: python script.py -d <domain_base>")
-    print("Example: python script.py -d example")
+    print("Usage: python tld-status.py -d <domain_base>")
+    print("Example: python tld-status.py -d example")
     print("Options:")
     print("  -d  Specify the base domain to check against all TLDs from IANA list.")
     print("  -h, --help  Show this help message and exit.")
