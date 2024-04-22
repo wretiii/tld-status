@@ -3,7 +3,7 @@ Enumeration tool for the registration status of an organization's domain against
 
 Prerequisite:
 ```
-python3 -m pip install requests
+pip install python-whois
 ```
 
 Command syntax:
