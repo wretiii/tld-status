@@ -24,15 +24,23 @@ def check_whois(domain):
 
 def main(domain_base):
     tlds = fetch_tlds()
-    with ThreadPoolExecutor(max_workers=999) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(check_whois, f"{domain_base}.{tld}") for tld in tlds]
         registered_domains = [future.result() for future in futures if future.result() is not None]
     return registered_domains
 
+def print_help():
+    print("Usage: python script.py -d <domain_base>")
+    print("Example: python script.py -d example")
+    print("Options:")
+    print("  -d  Specify the base domain to check against all TLDs from IANA list.")
+    print("  -h, --help  Show this help message and exit.")
+
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    if "-d" in args:
-        domain_base = args[args.index("-d") + 1]
+    if "-h" in sys.argv or "--help" in sys.argv:
+        print_help()
+    elif "-d" in sys.argv:
+        domain_base = sys.argv[sys.argv.index("-d") + 1]
         registered_domains = main(domain_base)
         if registered_domains:
             print("The following domains are registered:")
@@ -40,3 +48,5 @@ if __name__ == "__main__":
                 print(domain)
         else:
             print("No registered domains found.")
+    else:
+        print_help()
