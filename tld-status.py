@@ -24,7 +24,7 @@ def check_whois(domain):
 
 def main(domain_base):
     tlds = fetch_tlds()
-    with ThreadPoolExecutor(max_workers=999) as executor:
+    with ThreadPoolExecutor(max_workers=850) as executor:
         futures = [executor.submit(check_whois, f"{domain_base}.{tld}") for tld in tlds]
         registered_domains = [future.result() for future in futures if future.result() is not None]
     return registered_domains
